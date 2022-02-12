@@ -1,48 +1,60 @@
 import random
+import copy
 
 class Gamer(object):
-
     cubes_value_list = [4, 6, 8, 10, 12, 20, 100]
 
     def reload_list(self, dick, current_pool):
         return [item for item in dick if item <= current_pool]
 
-
+    # @staticmethod
     def coolman_pool_generation(self, pool_value):
-        coolman_pool_dict = {'4': 0, '6': 0, '8': 0, '10': 0, '12': 0, '20': 0, '100': 0}
-        coolman_pool_list = [4, 6, 8, 10, 12, 20, 100]
+        self.coolman_pool_dict = {'4': 0, '6': 0, '8': 0, '10': 0, '12': 0, '20': 0, '100': 0}
+        self.coolman_pool_list = copy.deepcopy(self.cubes_value_list)
 
         while pool_value > 3:
 
             new_element = 0
             coolman_pool_list = self.reload_list(coolman_pool_list, pool_value)
 
-            try:
-                new_element = int(random.choice(coolman_pool_list))
-            except IndexError:
-                print("IndexError")
+            if len(coolman_pool_list) == 2:
+                new_element = max(coolman_pool_list)
+            else:
+                try:
+                    new_element = int(random.choice(coolman_pool_list))
+                except IndexError:
+                    print("IndexError")
 
             pool_value -= new_element
             coolman_pool_dict[str(new_element)] += 1
             print(coolman_pool_list)
 
-            # pool_value - int(coolman_pool.keys()
-            # map(lambda coolman_pool_value(random.random(0, 6)) : )
-
         return coolman_pool_dict
+
+    # @staticmethod
+    def heal_selection(self, coolman_pool_dict):
+        if coolman_pool_dict.get("100") >= 1:
+            personal_heal = 100
+        else:
+            personal_heal = random.choice([int(item) for item in coolman_pool_dict.keys()
+                                           if coolman_pool_dict.get(item) > 0])
+            pass
+
+        return personal_heal
 
     def __init__(self, personal_pool):
         print("!")
+        self.coolman_pool_dict = coolm
         pass
-
 
 
 # / ||константа пула
 # / создание двух и более тактик выбора кубов хила и оттуда стратегий
 # / соединить пулы в ините и в методах
 # / оборонительная комбинорованная и наступательная стратегии соответсяственно 10%>=  10%< =<30%  30%< ил от пула
-# / добавить выбор наибольшего значения про двух последних элементов пула вовремя разбивки пула
-# / лучше брать 1к100 в хил если есть
+# / ||добавить выбор наибольшего значения про двух последних элементов пула вовремя разбивки пула
+# / ||лучше брать 1к100 в хил если есть
 
 t = Gamer(500)
-print(t.coolman_pool_generation(500))
+print(t.coolman_pool_generation(60))
+print(t.heal_selection(t.coolman_pool_generation(60)))
