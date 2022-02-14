@@ -38,7 +38,7 @@ new_player.dict_creation(input().split())
 
 print("There is your pool: ", new_player.human_pool_dict)
 # сделано создание словаря у человека
-# дальше оформлять мейн, и классы игроков по пути
+# дальше оформлять мейн, и классы игроков по пути.
 # рандомайзер
 
 
