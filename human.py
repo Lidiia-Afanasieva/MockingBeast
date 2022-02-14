@@ -20,4 +20,5 @@ class Human(Gamer):
 
     pass
 # >>> {x: y for x in 'ABC' for y in 'XYZ'}
+
 # {'A': 'Z', 'B': 'Z', 'C': 'Z'}

@@ -53,4 +53,5 @@ class Coolman(Gamer):
     def balanced_heal_tactics(self):
 
         pass
+
     pass

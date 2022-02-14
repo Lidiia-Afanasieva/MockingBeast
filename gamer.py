@@ -31,6 +31,6 @@ class Gamer(object):
 # / ||добавить выбор наибольшего значения про двух последних элементов пула вовремя разбивки пула
 # / ||лучше брать 1к100 в хил если есть
 
-# t = Gamer(500)
+# t = Gamer(500).
 # print(t.coolman_pool_generation(60))
 # print(t.heal_selection(t.coolman_pool_generation(60)))
