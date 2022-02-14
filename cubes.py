@@ -8,6 +8,7 @@ class Cubes(object):
         pass
 
     # def cubes_rate_definition(self, value, PERSONAL_POOL):
+
     #     self.PERSONAL_POOL = PERSONAL_POOL
     #     if self.PERSONAL_POOL <= 50:
     #         if value == 2: self.value = 2
