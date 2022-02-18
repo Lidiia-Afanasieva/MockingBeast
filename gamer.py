@@ -19,8 +19,9 @@ class Gamer(object):
     #     return personal_heal
 
     def __init__(self, pool_value):
-        print("!")
         # self.coolman_pool_dict = coolm
+        self.current_attack = 0
+        self.current_block = 0
         pass
 
 

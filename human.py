@@ -11,6 +11,7 @@ class Human(Gamer):
         self.human_pool_dict = {'4': 0, '6': 0, '8': 0, '10': 0, '12': 0, '20': 0, '100': 0}
         self.human_pool_list = copy.deepcopy(self.cubes_value_list)
         self.human_pool = pool_value
+        self.personal_heal = 0
         pass
 
     def dict_creation(self, human_list: list):
