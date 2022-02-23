@@ -57,12 +57,14 @@ while coolman_player.personal_heal > 0 and human_player.personal_heal > 0:
     if gamer_list[0] == human_player:
         print("Your turn. Enter the attack cube value")
         human_player.current_attack = int(input())
-        coolman_player.tactic_selection(block)
+        coolman_player.tactic_selection('block')
+
+        # print("Yor attack was repel with 1d{0} cube".format(block_value))
 
     else:
         print("You are have been attacked. Enter your block cube value")
         human_player.current_block = int(input())
-        coolman_player.tactic_selection(attack)
+        coolman_player.tactic_selection('attack')
 
 
 # сделано создание словаря у человека

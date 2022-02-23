@@ -22,6 +22,7 @@ class Gamer(object):
         # self.coolman_pool_dict = coolm
         self.current_attack = 0
         self.current_block = 0
+        self.personal_heal = 0
         pass
 
 
