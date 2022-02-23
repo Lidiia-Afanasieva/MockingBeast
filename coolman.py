@@ -10,7 +10,7 @@ class Coolman(Gamer):
         self.coolman_pool_dict = {'4': 0, '6': 0, '8': 0, '10': 0, '12': 0, '20': 0, '100': 0}
         self.coolman_pool_list = copy.deepcopy(self.cubes_value_list)
         self.coolman_pool = pool_value
-        self.personal_heal = 0
+
 
     def coolman_pool_generation(self):
         pool_value_remainder = self.coolman_pool
@@ -37,36 +37,76 @@ class Coolman(Gamer):
         return self.coolman_pool_dict
 
     def heal_selection(self):
+
         if self.coolman_pool_dict.get("100") >= 1:
-            self.personal_heal = 100 # лучше 100 быть хила не может, а тратить на атаку/защиту 1к100 жалко
+            self.personal_heal = 100  # лучше 100 быть хила не может, а тратить на атаку/защиту 1к100 жалко
+
         else:
             self.personal_heal = random.choice([int(item) for item in self.coolman_pool_dict.keys()
-                                           if self.coolman_pool_dict.get(item) > 0])
+                                                if self.coolman_pool_dict.get(item) > 0])
 
         return self.personal_heal
 
     # выбор тактики боя в зависимости от значения хила
-    def tactic_selection(self, ):
+    def tactic_selection(self, action):
 
-        if self.heal_selection <= 0.1 * self.personal_heal:
+# ЕБУЧАЯ ОШИБКА В РОТ ЕЁ ДЕРИ КАК ЖЕ ЗАЕБАЛО ВСЁ
+# перетащить сюда блоки и атаки и вызывовы фунций, потом уже разбираться с коментани ниже
+
+        if self.personal_heal <= 0.1 * self.coolman_pool:
             return self.small_heal_tactics()
 
-        elif 0.1 * self.personal_heal < self.heal_selection <= 0.2 * self.personal_heal:
+        elif 0.1 * self.coolman_pool < self.personal_heal <= 0.2 * self.coolman_pool:
             return self.balanced_heal_tactics()
 
-        elif self.heal_selection > 0.2 * self.personal_heal:
+        elif self.personal_heal > 0.2 * self.coolman_pool:
             return self.high_heal_tactics()
 
-    def small_heal_tactics(self):
+# вычесть вытащенный элемент из словаря
+# занулить переменную атаки и блока
+# розыгрыш кубов добавить
 
-        pass
+    def small_heal_tactics(self, action):
 
-    def high_heal_tactics(self):
+        if action == 'block':
+            self.current_block = max([int(item) for item in self.coolman_pool_dict.keys()
+                               if self.coolman_pool_dict.get(item) > 0])
+            self.coolman_pool_dict()!!!!!!!!!
+            return self.current_block
 
-        pass
+        elif action == 'attack':
+            self.current_attack = min([int(item) for item in self.coolman_pool_dict.keys()
+                                if self.coolman_pool_dict.get(item) > 0])
+            return self.current_attack
 
-    def balanced_heal_tactics(self):
+        return "Error in tactics"
 
-        pass
+    def high_heal_tactics(self, action):
+
+        if action == 'block':
+            self.current_block = min([int(item) for item in self.coolman_pool_dict.keys()
+                               if self.coolman_pool_dict.get(item) > 0])
+            return self.current_block
+
+        elif action == 'attack':
+            self.self.current_attack = max([int(item) for item in self.coolman_pool_dict.keys()
+                                if self.coolman_pool_dict.get(item) > 0])
+            return self.current_attack
+
+        return "Error in tactics"
+
+    def balanced_heal_tactics(self, action):
+
+        if action == 'block':
+            self.current_block = random.choice([int(item) for item in self.coolman_pool_dict.keys()
+                                         if self.coolman_pool_dict.get(item) > 0])
+            return self.current_block
+
+        elif action == 'attack':
+            self.current_attack = random.choice([int(item) for item in self.coolman_pool_dict.keys()
+                                          if self.coolman_pool_dict.get(item) > 0])
+            return print("Yor attack with 1d{0} cube".format(self.current_attack))
+
+        return "Error in tactics"
 
     pass
