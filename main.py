@@ -50,15 +50,18 @@ coolman_player.heal_selection()
 print('personal_heal :', coolman_player.personal_heal)
 
 gamer_list = [coolman_player, human_player]
-random.shuffle(gamer_list)
+random.shuffle(gamer_list)  # надо будет вывести отдельно чтобы менять очерёдность после опкончания кубов
 
 while coolman_player.personal_heal > 0 and human_player.personal_heal > 0:
+    # продумать окончание кубов, но не окончание хила
 
     if gamer_list[0] == human_player:
         print("Your turn. Enter the attack cube value")
         human_player.current_attack = int(input())
         coolman_player.tactic_selection('block')
-
+        coolman_player.current_block
+        # нужно придумать как поочерёдно передавать ход
+        # розыгрыш кубов
         # print("Yor attack was repel with 1d{0} cube".format(block_value))
 
     else:
