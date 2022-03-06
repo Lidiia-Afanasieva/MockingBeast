@@ -2,8 +2,8 @@ from gamer import Gamer
 import random
 import copy
 
-# дособирать этот класс и определить общие методы
-# начать разбираться с мейновским файлом
+
+# определить общие методы
 
 class Human(Gamer):
     def __init__(self, pool_value):
@@ -17,8 +17,3 @@ class Human(Gamer):
         self.human_pool_list = human_list
         self.human_pool_dict = dict(zip(self.human_pool_dict.keys(), human_list))
         return 0
-
-    pass
-# >>> {x: y for x in 'ABC' for y in 'XYZ'}
-
-# {'A': 'Z', 'B': 'Z', 'C': 'Z'}

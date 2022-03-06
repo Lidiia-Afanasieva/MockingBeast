@@ -1,5 +1,6 @@
 import random
 import copy
+import time
 
 
 class Gamer(object):
@@ -24,15 +25,3 @@ class Gamer(object):
         self.current_block = 0
         self.personal_heal = 0
         pass
-
-
-# / ||константа пула
-# / создание двух и более тактик выбора кубов хила и оттуда стратегий
-# / соединить пулы в ините и в методах
-# / оборонительная комбинорованная и наступательная стратегии соответсяственно 10%>=  10%< =<30%  30%< ил от пула
-# / ||добавить выбор наибольшего значения про двух последних элементов пула вовремя разбивки пула
-# / ||лучше брать 1к100 в хил если есть
-
-# t = Gamer(500).
-# print(t.coolman_pool_generation(60))
-# print(t.heal_selection(t.coolman_pool_generation(60)))

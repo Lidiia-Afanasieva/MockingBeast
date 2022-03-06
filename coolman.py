@@ -49,9 +49,6 @@ class Coolman(Gamer):
     # выбор тактики боя в зависимости от значения хила
     def tactic_selection(self, action):
 
-        # ||ЕБУЧАЯ ОШИБКА В РОТ ЕЁ ДЕРИ КАК ЖЕ ЗАЕБАЛО ВСЁ
-        # ||перетащить сюда блоки и атаки и вызывовы фунций, потом уже разбираться с коментани ниже
-
         if self.personal_heal <= 0.1 * self.coolman_pool:
             return self.small_heal_tactics(action)
 
@@ -61,7 +58,6 @@ class Coolman(Gamer):
         elif self.personal_heal > 0.2 * self.coolman_pool:
             return self.high_heal_tactics(action)
 
-    # ||вычесть вытащенный элемент из словаря
     # занулить переменную атаки и блока
     # розыгрыш кубов добавить
 
@@ -126,5 +122,8 @@ class Coolman(Gamer):
             self.coolman_pool_dict[str(self.current_attack)] -= 1
 
         return "Error in tactics"
+
+    def coolman_attack_time(self):
+        pass
 
     pass
