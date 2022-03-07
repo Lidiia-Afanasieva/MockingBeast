@@ -33,6 +33,8 @@ class Coolman(Gamer):
         # если новое значение пула меньше заданного, необходимо обновить его
         self.coolman_pool = sum([int(key) * value for key, value in self.coolman_pool_dict.items()])
 
+        self.dict_on_this_game_const.deepcopy(self.coolman_pool_dict)
+
         return self.coolman_pool_dict
 
     def heal_selection(self):
