@@ -1,6 +1,8 @@
-from gamer import Gamer
 import random
 import copy
+
+from gamer import Gamer
+from main import reload_list
 
 
 class Coolman(Gamer):
@@ -17,7 +19,7 @@ class Coolman(Gamer):
         while pool_value_remainder > 3:
 
             new_element = 0
-            self.coolman_pool_list = self.reload_list(self.coolman_pool_list, pool_value_remainder)
+            self.coolman_pool_list = reload_list(self.coolman_pool_list, pool_value_remainder)
 
             if len(self.coolman_pool_list) == 2:
                 new_element = max(self.coolman_pool_list)  # нет смысла брать меньшее,т.к цикл закончится
@@ -33,7 +35,7 @@ class Coolman(Gamer):
         # если новое значение пула меньше заданного, необходимо обновить его
         self.coolman_pool = sum([int(key) * value for key, value in self.coolman_pool_dict.items()])
 
-        self.dict_on_this_game_const.deepcopy(self.coolman_pool_dict)  # THIS POINT OF COPY
+        self.DICT_ON_THIS_GAME.deepcopy(self.coolman_pool_dict)  # THIS POINT OF COPY
 
         return self.coolman_pool_dict
 
