@@ -1,15 +1,12 @@
 import random
 import time
-from typing import Final
+from typing import Optional
 
 from human import Human
 from coolman import Coolman
 
 everyone_is_alive = True
-POOL_VALUE = 0  # пока только объявлена, но не инициализирована
-human_player = Human(POOL_VALUE)
-coolman_player = Coolman(POOL_VALUE)
-gamer_list = [coolman_player, human_player]
+POOL_VALUE: Optional[int]  # пока только объявлена, но не инициализирована
 
 
 def human_character_initialisation():
@@ -19,7 +16,7 @@ def human_character_initialisation():
     human_player.personal_heal = int(input("Enter your heal value: "))
     human_player.human_pool_dict[str(human_player.personal_heal)] -= 1
 
-    human_player.DICT_ON_THIS_GAME.deepcopy(human_player.human_pool_dict)  # THIS POINT OF COPY
+    human_player.DICT_ON_THIS_GAME.deepcopy(human_player.human_pool_dict)  # THIS IS POINT OF COPY
 
     return 0
 
@@ -36,7 +33,7 @@ def output_start_of_the_game():
 
     print("B MO")
 
-    POOL_VALUE: Final = int(input("Enter the pool value "))
+    POOL_VALUE = int(input("Enter the pool value "))
 
     print("You can enter any count of cubes, but its sum must be less then pool value.(4, 6, 8, 10, 12, 20, 100)")
     print("Example: 0 3 0 4 1 2 0 Means count 1d4 = 0 1d6 = 3 and etc. Sum of your pool = 288")
@@ -48,8 +45,8 @@ def output_start_of_the_game():
     random.shuffle(gamer_list)
 
 
-def reload_list(dick, pool_value_remainder):
-    return [item for item in dick if item <= pool_value_remainder]  # wtf its doing
+def reload_list(work_list: list, pool_value_remainder: int) -> list:
+    return [item for item in work_list if item <= pool_value_remainder]  # wtf its doing
 
 
 def intrigue_maker():
@@ -63,7 +60,7 @@ def intrigue_maker():
     return 0
 
 
-def cubes_roll(attack_cube, block_cube):
+def cubes_roll(attack_cube: int, block_cube: int) -> tuple:
 
     attack_value = random.randint(1, attack_cube)
     block_value = random.randint(1, block_cube)
@@ -75,7 +72,7 @@ def cubes_roll(attack_cube, block_cube):
         return 0, attack_value, block_value
 
 
-def output_battle_score():
+def output_battle_score() -> None:
 
     reload_list(human_player.human_pool_dict, 0)  # NOT SURE IN THE PLACE OF FUNC
     print('///')
@@ -85,10 +82,8 @@ def output_battle_score():
     print('Your opponent heal at this moment is :', coolman_player.personal_heal)
     print('///')
 
-    return 0
 
-
-def check_empty_dicts():
+def check_empty_dicts() -> int:
 
     if sum(human_player.human_pool_dict.items()) < 1 and sum(coolman_player.coolman_pool_dict.items()) < 1:
         return 1
@@ -103,15 +98,7 @@ def check_empty_dicts():
         return 0
 
 
-# ВООБЩЕ КРАСИВО БЫЛО БЫ ПОТОМ НАПИСАТЬ БД ВОЗМОЖНЫХ ОТВЕТОВ КОМПА НА РАЗНЫЕ ПУНКТЫ, ЧТОБЫ НЕ ЗАМАЗОЛИЛО ГЛАЗА
-# ВООБЩЕ ПОСВЕЖЕМУ НУЖНО ГЛЯНУТЬ НА АРХИТЕКТУРУ ИБО ОНА КОСТЫЛЬНАЯ
-# ДА И КОД БОЛЕЕ... ПРОФИ СДЕЛАТЬ... БЫЛО БЫ КЛАССНО ДЕКОРАТОРЫ ТАМ ВПИХНУТЬ, АНОТАЦИИ
-# TESTS
-
-# IM NOT SURE DICTS HAVE RESET, WHEN COUNT OF VALUE = 0!!!!!!!!!!!!!!!!!!
-
-
-def print_calculation_of_human_attack():
+def print_calculation_of_human_attack() -> None:
 
     damage, attack_value, block_value = cubes_roll(human_player.current_attack, coolman_player.current_block)
     human_player.human_pool_dict[str(human_player.current_attack)] -= 1
@@ -124,11 +111,9 @@ def print_calculation_of_human_attack():
     else:
         print('Coolman side was full blocked. Score is {0} : {1}'.format(attack_value, block_value))
 
-    return 0
-
 
 # ADD CHECK OF EMPTY DICTS. OUTPUT THAT GAMER IS EMPTY// maybe as a check
-def human_attack():
+def human_attack() -> None:
 
     human_player.current_attack = int(input("Your turn. Enter the attack cube value "))
     coolman_player.tactic_selection('block')
@@ -138,10 +123,8 @@ def human_attack():
 
     print_calculation_of_human_attack()
 
-    return 0
 
-
-def print_calculation_of_coolman_attack():
+def print_calculation_of_coolman_attack() -> None:
 
     damage, attack_value, block_value = cubes_roll(coolman_player.current_attack, human_player.current_block)
     human_player.human_pool_dict[str(human_player.current_block)] -= 1
@@ -154,11 +137,9 @@ def print_calculation_of_coolman_attack():
     else:
         print('Coolman side was full blocked. Score is {0} : {1}'.format(attack_value, block_value))
 
-    return 0
-
 
 # ADD CHECK OF EMPTY DICTS. OUTPUT THAT GAMER IS EMPTY// maybe as a check
-def coolman_attack():
+def coolman_attack() -> None:
 
     human_player.current_block = int(input("Your turn. Enter the block cube value "))
     coolman_player.tactic_selection('attack')
@@ -167,8 +148,6 @@ def coolman_attack():
     intrigue_maker()
 
     print_calculation_of_coolman_attack()
-
-    return 0
 
 
 # ////////////////////////////////////////////////////////////
@@ -190,6 +169,10 @@ def coolman_attack():
 
 
 output_start_of_the_game()
+
+human_player = Human(POOL_VALUE)
+coolman_player = Coolman(POOL_VALUE)
+gamer_list = [coolman_player, human_player]
 
 
 while everyone_is_alive:
@@ -302,5 +285,15 @@ if not everyone_is_alive:
         print('But anyway... You are an idiot')
 
 
-# !!! если значение пула будет 100 - 103 и как хил будет выбрана 100, то комп проиграет, надо исправить (regeneration)
+# если значение пула будет 100 - 103 и как хил будет выбрана 100, то комп проиграет, надо исправить (regeneration)
+# ещё там что-то доделать надо в coolman.py
+
+# ВООБЩЕ КРАСИВО БЫЛО БЫ ПОТОМ НАПИСАТЬ БД ВОЗМОЖНЫХ ОТВЕТОВ КОМПА НА РАЗНЫЕ ПУНКТЫ, ЧТОБЫ НЕ ЗАМАЗОЛИЛО ГЛАЗА
+# ВООБЩЕ ПОСВЕЖЕМУ НУЖНО ГЛЯНУТЬ НА АРХИТЕКТУРУ ИБО ОНА КОСТЫЛЬНАЯ
+# ДА И КОД БОЛЕЕ... ПРОФИ СДЕЛАТЬ... БЫЛО БЫ КЛАССНО ДЕКОРАТОРЫ ТАМ ВПИХНУТЬ, АНОТАЦИИ
+# TESTS
+
+# IM NOT SURE DICTS HAVE RESET, WHEN COUNT OF VALUE = 0!!!!!!!!!!!!!!!!!!
+
+
 # 2 0 3 0 1 2 0
