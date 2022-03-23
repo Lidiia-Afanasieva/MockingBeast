@@ -14,5 +14,5 @@ class Human(Gamer):
 
     def dict_creation(self, human_list: list) -> None:
 
-        self.human_pool_list = human_list
-        self.human_pool_dict = dict(zip(self.human_pool_dict.keys(), human_list))
+        self.human_pool_list = list(map(lambda item: int(item), human_list))
+        self.human_pool_dict = dict(zip(self.human_pool_dict.keys(), self.human_pool_list))
