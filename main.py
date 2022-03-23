@@ -1,43 +1,68 @@
+import copy
 import random
 import time
 from typing import Optional
 
-from human import Human
+# from human import Human
+# from coolman import Coolman
 from coolman import Coolman
+from human import Human
 
 everyone_is_alive = True
-POOL_VALUE: Optional[int]  # пока только объявлена, но не инициализирована
+POOL_VALUE: Optional[int] = 0  # пока только объявлена, но не инициализирована
+
+
+human_player = Human(POOL_VALUE)
+coolman_player = Coolman(POOL_VALUE)
+gamer_list = [coolman_player, human_player]
 
 
 def human_character_initialisation():
+    global POOL_VALUE
+
     # создание данных человека
     human_player.dict_creation(input().split())
-    print("There is your pool: ", human_player.human_pool_dict)
-    human_player.personal_heal = int(input("Enter your heal value: "))
-    human_player.human_pool_dict[str(human_player.personal_heal)] -= 1
 
-    human_player.DICT_ON_THIS_GAME.deepcopy(human_player.human_pool_dict)  # THIS IS POINT OF COPY
+    print("human_player.human_pool_list :", human_player.human_pool_list)
+    print("after dickt creation human_player.human_pool_dict :", human_player.human_pool_dict)
+
+    print("There is your pool: ", human_player.human_pool_dict)
+    # print('Error in PH init')
+    human_player.personal_heal = int(input("Enter your heal value: "))
+    human_player.human_pool = POOL_VALUE
+    print('pool =', human_player.human_pool)
+    # print('Error in PH decr')
+    # print(human_player.human_pool_dict[str(human_player.personal_heal)])
+    # print(type(human_player.human_pool_dict[str(human_player.personal_heal)]))
+    human_player.DICT_ON_THIS_GAME = copy.deepcopy(human_player.human_pool_dict)  # THIS IS POINT OF COPY
 
     return 0
 
 
 def coolman_character_initialisation():
+    global POOL_VALUE
+
     # создание данных компьютера
+    print(coolman_player.coolman_pool_dict)
+    coolman_player.coolman_pool = POOL_VALUE
     coolman_player.coolman_pool_generation()
+    print(coolman_player.coolman_pool_dict)
     coolman_player.heal_selection()
 
     return 0
+# 3 1 0 0 0 0 0
 
 
 def output_start_of_the_game():
-
+    global POOL_VALUE
     print("B MO")
 
-    POOL_VALUE = int(input("Enter the pool value "))
+    POOL_VALUE = int(input("Enter the pool value : "))
+    print('POOL_VALUE :', POOL_VALUE)
 
     print("You can enter any count of cubes, but its sum must be less then pool value.(4, 6, 8, 10, 12, 20, 100)")
     print("Example: 0 3 0 4 1 2 0 Means count 1d4 = 0 1d6 = 3 and etc. Sum of your pool = 288")
-    print("Its OK if current Pool Value is 288 or more, else piss of")
+    print("Its OK if current Pool Value is 288 or less, else piss of")
 
     human_character_initialisation()
     coolman_character_initialisation()
@@ -45,8 +70,8 @@ def output_start_of_the_game():
     random.shuffle(gamer_list)
 
 
-def reload_list(work_list: list, pool_value_remainder: int) -> list:
-    return [item for item in work_list if item <= pool_value_remainder]  # wtf its doing
+def reload_list(work_dict: dict, pool_value_remainder: int) -> list:
+    return [item for item in work_dict.values() if item <= pool_value_remainder]  # wtf its doing
 
 
 def intrigue_maker():
@@ -85,13 +110,14 @@ def output_battle_score() -> None:
 
 def check_empty_dicts() -> int:
 
-    if sum(human_player.human_pool_dict.items()) < 1 and sum(coolman_player.coolman_pool_dict.items()) < 1:
+    print('last', human_player.human_pool_dict.values())
+    if sum(list(human_player.human_pool_dict.values())) < 1 and sum(list(coolman_player.coolman_pool_dict.values())) < 1:
         return 1
 
-    elif sum(human_player.human_pool_dict.items()) > 1 and sum(coolman_player.coolman_pool_dict.items()) < 1:
+    elif sum(list(human_player.human_pool_dict.values())) > 1 and sum(list(coolman_player.coolman_pool_dict.values())) < 1:
         return 2
 
-    elif sum(human_player.human_pool_dict.items()) < 1 and sum(coolman_player.coolman_pool_dict.items()) > 1:
+    elif sum(list(human_player.human_pool_dict.values())) < 1 and sum(list(coolman_player.coolman_pool_dict.values())) > 1:
         return 3
 
     else:
@@ -170,11 +196,8 @@ def coolman_attack() -> None:
 
 output_start_of_the_game()
 
-human_player = Human(POOL_VALUE)
-coolman_player = Coolman(POOL_VALUE)
-gamer_list = [coolman_player, human_player]
-
-
+print("before the fight while\nhuman_player.human_pool_dict :", human_player.human_pool_dict)
+print("coolman_player.coolman_pool_dict :", coolman_player.coolman_pool_dict)
 while everyone_is_alive:
 
     while check_empty_dicts() != 1:
