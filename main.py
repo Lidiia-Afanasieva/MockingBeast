@@ -21,6 +21,7 @@ def human_character_initialisation():
     global POOL_VALUE
 
     # создание данных человека
+    # ТУТ ГДЕТО ПРОБЛЕМА С НЕВЫЧЕТОМ ХИЛА ИЗ ПУЛА
     human_player.dict_creation(input().split())
 
     print("human_player.human_pool_list :", human_player.human_pool_list)
@@ -31,6 +32,7 @@ def human_character_initialisation():
     human_player.personal_heal = int(input("Enter your heal value: "))
     human_player.human_pool = POOL_VALUE
     print('pool =', human_player.human_pool)
+    human_player.human_pool_dict[str(human_player.personal_heal)] -= 1
     # print('Error in PH decr')
     # print(human_player.human_pool_dict[str(human_player.personal_heal)])
     # print(type(human_player.human_pool_dict[str(human_player.personal_heal)]))
@@ -70,8 +72,9 @@ def output_start_of_the_game():
     random.shuffle(gamer_list)
 
 
-def reload_list(work_dict: dict, pool_value_remainder: int) -> list:
-    return [item for item in work_dict.values() if item <= pool_value_remainder]  # wtf its doing
+def reload_dict(work_dict: dict) -> dict:
+    # return [item for item in work_dict.values() if item <= pool_value_remainder]  # wtf its doing
+    return dict(filter(lambda item: item[1] > 0, work_dict.items()))  # perfection
 
 
 def intrigue_maker():
@@ -81,6 +84,7 @@ def intrigue_maker():
     print("ROLL..")
     time.sleep(1)
     print("ROLL...")
+    time.sleep(1)
 
     return 0
 
@@ -88,7 +92,11 @@ def intrigue_maker():
 def cubes_roll(attack_cube: int, block_cube: int) -> tuple:
 
     attack_value = random.randint(1, attack_cube)
-    block_value = random.randint(1, block_cube)
+
+    if block_cube != 0:
+        block_value = random.randint(1, block_cube)
+    else:
+        block_value = block_cube
 
     if attack_value > block_value:
         return attack_value - block_value, attack_value, block_value
@@ -99,7 +107,7 @@ def cubes_roll(attack_cube: int, block_cube: int) -> tuple:
 
 def output_battle_score() -> None:
 
-    reload_list(human_player.human_pool_dict, 0)  # NOT SURE IN THE PLACE OF FUNC
+    reload_dict(human_player.human_pool_dict)  # NOT SURE IN THE PLACE OF FUNC
     print('///')
     print('Your heal at this moment is :', human_player.personal_heal)
     print('Your available cubes now :', human_player.human_pool_dict)
@@ -110,14 +118,14 @@ def output_battle_score() -> None:
 
 def check_empty_dicts() -> int:
 
-    print('last', human_player.human_pool_dict.values())
+    # print('last', human_player.human_pool_dict.values())
     if sum(list(human_player.human_pool_dict.values())) < 1 and sum(list(coolman_player.coolman_pool_dict.values())) < 1:
         return 1
 
-    elif sum(list(human_player.human_pool_dict.values())) > 1 and sum(list(coolman_player.coolman_pool_dict.values())) < 1:
+    elif sum(list(human_player.human_pool_dict.values())) > 0 and sum(list(coolman_player.coolman_pool_dict.values())) < 1:
         return 2
 
-    elif sum(list(human_player.human_pool_dict.values())) < 1 and sum(list(coolman_player.coolman_pool_dict.values())) > 1:
+    elif sum(list(human_player.human_pool_dict.values())) < 1 and sum(list(coolman_player.coolman_pool_dict.values())) > 0:
         return 3
 
     else:
@@ -157,7 +165,7 @@ def print_calculation_of_coolman_attack() -> None:
 
     if damage > 0:
         human_player.personal_heal -= damage
-        print('Human side is won this time. '
+        print('Coolman side is won this time. '
               'Score is {0} : {1}. Damage is : {2}'.format(attack_value, block_value, damage))
 
     else:
@@ -196,8 +204,8 @@ def coolman_attack() -> None:
 
 output_start_of_the_game()
 
-print("before the fight while\nhuman_player.human_pool_dict :", human_player.human_pool_dict)
-print("coolman_player.coolman_pool_dict :", coolman_player.coolman_pool_dict)
+# print("before the fight while\nhuman_player.human_pool_dict :", human_player.human_pool_dict)
+# print("coolman_player.coolman_pool_dict :", coolman_player.coolman_pool_dict)
 while everyone_is_alive:
 
     while check_empty_dicts() != 1:
@@ -235,10 +243,11 @@ while everyone_is_alive:
             intrigue_maker()
             start_heal = human_player.personal_heal
 
-            for cube_value in coolman_player.coolman_pool_dict.keys():
+            for cube_value in list(coolman_player.coolman_pool_dict.keys()):
 
-                for cube_count in coolman_player.coolman_pool_dict.values():
-
+                for cube_count in list(coolman_player.coolman_pool_dict.values()):
+                    # print("cube_count :", cube_count)
+                    # print("cube_value :", cube_value)
                     damage, attack_value, block_value = cubes_roll(int(cube_value), 0)
                     human_player.personal_heal -= damage
                     print('His cube: {0}, its damage: {1}'.format(cube_value, damage))
@@ -277,7 +286,7 @@ while everyone_is_alive:
 
                     everyone_is_alive = False
 
-    print('Now you and your opponent are empty.')
+    print('\nNow you or your opponent are empty.\n')
 
     if everyone_is_alive:
 
