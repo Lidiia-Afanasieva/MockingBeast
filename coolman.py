@@ -20,16 +20,16 @@ class Coolman(Gamer):
     def coolman_pool_generation(self) -> dict:
 
         pool_value_remainder: int = self.coolman_pool
-        print('while didnt started')
-        print('self.pool_value =', self.pool_value)
-        print('self.coolman_pool =', self.coolman_pool)
-        print("coolman_remainder =", pool_value_remainder)
+        # print('while didnt started')
+        # print('self.pool_value =', self.pool_value)
+        # print('self.coolman_pool =', self.coolman_pool)
+        # print("coolman_remainder =", pool_value_remainder)
         while pool_value_remainder > 3:
             print('while started')
 
             new_element = 0
             self.coolman_pool_list = reload_list(self.coolman_pool_list, pool_value_remainder)
-            print("reloded")
+            # print("reloded")
 
             if len(self.coolman_pool_list) == 2:
                 new_element = max(self.coolman_pool_list)  # нет смысла брать меньшее,т.к цикл закончится
@@ -38,7 +38,7 @@ class Coolman(Gamer):
 
                 try:
                     new_element = int(random.choice(self.coolman_pool_list))
-                    print("new_element add")
+                    # print("new_element add")
 
                 except IndexError:
                     print("________IndexError________")
@@ -49,19 +49,24 @@ class Coolman(Gamer):
         # если новое значение пула меньше заданного, необходимо обновить его
         self.coolman_pool = sum([int(key) * value for key, value in self.coolman_pool_dict.items()])
 
-        self.DICT_ON_THIS_GAME = copy.deepcopy(self.coolman_pool_dict)  # THIS IS POINT OF COPY
-
         return self.coolman_pool_dict
 
     def heal_selection(self) -> int:
 
-        if self.coolman_pool_dict.get("100") >= 1:
+        if self.coolman_pool_dict.get("100") >= 1 and self.coolman_pool > 103:
+
             self.personal_heal = 100  # лучше 100 быть хила не может, а тратить на атаку/защиту 1к100 жалко
 
         else:
-            print(f' items : {self.coolman_pool_dict.get("6")}')
-            print(f' items : {self.coolman_pool_dict.items()}')
-            self.personal_heal = random.choice([int(item) for item in self.coolman_pool_dict.keys() if self.coolman_pool_dict.get(item) > 0])
+
+            # print(f' items : {self.coolman_pool_dict.get("6")}')
+            # print(f' items : {self.coolman_pool_dict.items()}')
+            self.personal_heal = random.choice([int(item) for item in self.coolman_pool_dict.keys()
+                                                if self.coolman_pool_dict.get(item) > 0])
+
+        self.coolman_pool_dict[str(self.personal_heal)] -= 1
+
+        self.DICT_ON_THIS_GAME = copy.deepcopy(self.coolman_pool_dict)  # THIS IS POINT OF COPY
 
         return self.personal_heal
 
