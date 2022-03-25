@@ -2,7 +2,6 @@ import random
 import copy
 
 from gamer import Gamer
-# from main import reload_list
 
 
 def reload_list(work_list: list, pool_value_remainder: int) -> list:
@@ -20,12 +19,8 @@ class Coolman(Gamer):
     def coolman_pool_generation(self) -> dict:
 
         pool_value_remainder: int = self.coolman_pool
-        # print('while didnt started')
-        # print('self.pool_value =', self.pool_value)
-        # print('self.coolman_pool =', self.coolman_pool)
-        # print("coolman_remainder =", pool_value_remainder)
+
         while pool_value_remainder > 3:
-            print('while started')
 
             new_element = 0
             self.coolman_pool_list = reload_list(self.coolman_pool_list, pool_value_remainder)
@@ -59,8 +54,6 @@ class Coolman(Gamer):
 
         else:
 
-            # print(f' items : {self.coolman_pool_dict.get("6")}')
-            # print(f' items : {self.coolman_pool_dict.items()}')
             self.personal_heal = random.choice([int(item) for item in self.coolman_pool_dict.keys()
                                                 if self.coolman_pool_dict.get(item) > 0])
 
