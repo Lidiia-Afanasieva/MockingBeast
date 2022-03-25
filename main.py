@@ -3,8 +3,6 @@ import random
 import time
 from typing import Optional
 
-# from human import Human
-# from coolman import Coolman
 from coolman import Coolman
 from human import Human
 
@@ -21,21 +19,14 @@ def human_character_initialisation():
     global POOL_VALUE
 
     # создание данных человека
-    # ТУТ ГДЕТО ПРОБЛЕМА С НЕВЫЧЕТОМ ХИЛА ИЗ ПУЛА
     human_player.dict_creation(input().split())
 
-    print("human_player.human_pool_list :", human_player.human_pool_list)
-    print("after dickt creation human_player.human_pool_dict :", human_player.human_pool_dict)
-
     print("There is your pool: ", human_player.human_pool_dict)
-    # print('Error in PH init')
+    print("There is colman: ", coolman_player.coolman_pool_dict)  # DELETE THAN ACTUALLY
     human_player.personal_heal = int(input("Enter your heal value: "))
     human_player.human_pool = POOL_VALUE
     print('pool =', human_player.human_pool)
     human_player.human_pool_dict[str(human_player.personal_heal)] -= 1
-    # print('Error in PH decr')
-    # print(human_player.human_pool_dict[str(human_player.personal_heal)])
-    # print(type(human_player.human_pool_dict[str(human_player.personal_heal)]))
     human_player.DICT_ON_THIS_GAME = copy.deepcopy(human_player.human_pool_dict)  # THIS IS POINT OF COPY
 
     return 0
@@ -57,6 +48,7 @@ def coolman_character_initialisation():
 
 def output_start_of_the_game():
     global POOL_VALUE
+
     print("B MO")
 
     POOL_VALUE = int(input("Enter the pool value : "))
@@ -73,7 +65,6 @@ def output_start_of_the_game():
 
 
 def reload_dict(work_dict: dict) -> dict:
-    # return [item for item in work_dict.values() if item <= pool_value_remainder]  # wtf its doing
     return dict(filter(lambda item: item[1] > 0, work_dict.items()))  # perfection
 
 
@@ -108,9 +99,11 @@ def cubes_roll(attack_cube: int, block_cube: int) -> tuple:
 def output_battle_score() -> None:
 
     reload_dict(human_player.human_pool_dict)  # NOT SURE IN THE PLACE OF FUNC
+    time.sleep(1)
     print('///')
     print('Your heal at this moment is :', human_player.personal_heal)
     print('Your available cubes now :', human_player.human_pool_dict)
+    time.sleep(1)
     print('///')
     print('Your opponent heal at this moment is :', coolman_player.personal_heal)
     print('///')
@@ -118,18 +111,29 @@ def output_battle_score() -> None:
 
 def check_empty_dicts() -> int:
 
-    # print('last', human_player.human_pool_dict.values())
     if sum(list(human_player.human_pool_dict.values())) < 1 and sum(list(coolman_player.coolman_pool_dict.values())) < 1:
+        print("BOTH PLAYERS POOL IS ENDED")
         return 1
 
     elif sum(list(human_player.human_pool_dict.values())) > 0 and sum(list(coolman_player.coolman_pool_dict.values())) < 1:
+        print('COMPUTER POOL IS ENDED')
+
         return 2
 
     elif sum(list(human_player.human_pool_dict.values())) < 1 and sum(list(coolman_player.coolman_pool_dict.values())) > 0:
+        print('HUMANS POOL IS ENDED')
         return 3
 
     else:
         return 0
+
+
+def check_heal():
+    global everyone_is_alive
+
+    if coolman_player.personal_heal < 1 and human_player.personal_heal < 1:
+        everyone_is_alive = False
+    return everyone_is_alive
 
 
 def print_calculation_of_human_attack() -> None:
@@ -139,6 +143,9 @@ def print_calculation_of_human_attack() -> None:
 
     if damage > 0:
         coolman_player.personal_heal -= damage
+
+        time.sleep(1)
+
         print('Human side is won this time. '
               'Score is {0} : {1}. Damage is : {2}'.format(attack_value, block_value, damage))
 
@@ -149,6 +156,7 @@ def print_calculation_of_human_attack() -> None:
 # ADD CHECK OF EMPTY DICTS. OUTPUT THAT GAMER IS EMPTY// maybe as a check
 def human_attack() -> None:
 
+    time.sleep(1)
     human_player.current_attack = int(input("Your turn. Enter the attack cube value "))
     coolman_player.tactic_selection('block')
     print("You have been blocked with :", coolman_player.current_block)
@@ -165,15 +173,18 @@ def print_calculation_of_coolman_attack() -> None:
 
     if damage > 0:
         human_player.personal_heal -= damage
+        time.sleep(1)
         print('Coolman side is won this time. '
               'Score is {0} : {1}. Damage is : {2}'.format(attack_value, block_value, damage))
 
     else:
+        time.sleep(1)
         print('Coolman side was full blocked. Score is {0} : {1}'.format(attack_value, block_value))
 
 
 # ADD CHECK OF EMPTY DICTS. OUTPUT THAT GAMER IS EMPTY// maybe as a check
 def coolman_attack() -> None:
+    time.sleep(1)
 
     human_player.current_block = int(input("Your turn. Enter the block cube value "))
     coolman_player.tactic_selection('attack')
@@ -186,34 +197,20 @@ def coolman_attack() -> None:
 
 # ////////////////////////////////////////////////////////////
 # START
-
-
-# try:
-#     POOL_VALUE: Final = int(input())  # mypy
-# except ValueError:
-#     print("Pool value error.")
-
-
-# пока хз думаю лучше засунуть в юнит тесты человеческого файла
-# def check_cubes(gamer_cube_arr):
-#     if sum(gamer_cube_arr) > POOL_VALUE:
-#         return 0
-#     else:
-#         return 1
-
+# ////////////////////////////////////////////////////////////
 
 output_start_of_the_game()
 
-# print("before the fight while\nhuman_player.human_pool_dict :", human_player.human_pool_dict)
-# print("coolman_player.coolman_pool_dict :", coolman_player.coolman_pool_dict)
 while everyone_is_alive:
 
-    while check_empty_dicts() != 1:
+    while check_empty_dicts() != 1 and everyone_is_alive:
 
         check_the_dicks = check_empty_dicts()
 
         # coolman empty
-        if check_the_dicks == 2:
+        if check_the_dicks == 2 and everyone_is_alive:
+
+            time.sleep(1)
 
             print('Well, your opponent ended all his cubes, so now all your cubes will attack him.')
             print('Enjoy.')
@@ -222,69 +219,66 @@ while everyone_is_alive:
             intrigue_maker()
             start_heal = coolman_player.personal_heal
 
-            for cube_value in human_player.human_pool_dict.keys():
-
-                for cube_count in human_player.human_pool_dict.values():
-
-                    damage, attack_value, block_value = cubes_roll(int(cube_value), 0)
-                    coolman_player.personal_heal -= damage
-                    print('Your cube: {0}, its damage: {1}'.format(cube_value, damage))
+            for key, value in human_player.human_pool_dict.items():
+                if value > 0:
+                    for i in range(value):
+                        damage, attack_value, block_value = cubes_roll(int(key), 0)
+                        coolman_player.personal_heal -= damage
+                        print('Your cube: {0}, its damage: {1}'.format(int(key), damage))
 
             print('Finally, damage is:', start_heal - coolman_player.personal_heal)
 
-            if coolman_player.personal_heal == 0:
+            if coolman_player.personal_heal < 1:
+                print('COMPUTER HEAL IS ENDED')
                 everyone_is_alive = False
 
         # human empty
-        elif check_the_dicks == 3:
+        elif check_the_dicks == 3 and everyone_is_alive:
+
+            time.sleep(1)
 
             print('Well, you ended all your cubes, so now your opponent will attack you with all his cubes.')
             print('Good luck.')
             intrigue_maker()
             start_heal = human_player.personal_heal
 
-            for cube_value in list(coolman_player.coolman_pool_dict.keys()):
+            for key, value in coolman_player.coolman_pool_dict.items():
+                if value > 0:
+                    for i in range(value):
+                        damage, attack_value, block_value = cubes_roll(int(key), 0)
+                        human_player.personal_heal -= damage
+                        print('His cube: {0}, its damage: {1}'.format(int(key), damage))
 
-                for cube_count in list(coolman_player.coolman_pool_dict.values()):
-                    # print("cube_count :", cube_count)
-                    # print("cube_value :", cube_value)
-                    damage, attack_value, block_value = cubes_roll(int(cube_value), 0)
-                    human_player.personal_heal -= damage
-                    print('His cube: {0}, its damage: {1}'.format(cube_value, damage))
+            time.sleep(1)
 
-            print('Finally, damage is:', start_heal - human_player.personal_heal)
+            print('Finally, damage is:', start_heal - coolman_player.personal_heal)
 
-            if human_player.personal_heal == 0:
+            if human_player.personal_heal < 1:
+                print("HA-HA\nHUMAN PLAYER HEAL IS ENDED")
                 everyone_is_alive = False
+            print(everyone_is_alive)
 
         else:
 
-            if gamer_list[0] == human_player:
+            if gamer_list[0] == human_player and check_empty_dicts() == 0:
 
                 human_attack()
                 output_battle_score()
 
-                if coolman_player.personal_heal > 0 and human_player.personal_heal > 0:
+                if check_heal() and check_empty_dicts() == 0:
 
                     coolman_attack()
                     output_battle_score()
 
-                else:
+            elif check_empty_dicts() == 0:
 
-                    everyone_is_alive = False
-
-            else:
                 coolman_attack()
                 output_battle_score()
 
-                if coolman_player.personal_heal > 0 and human_player.personal_heal > 0:
+                if check_heal() and check_empty_dicts() == 0:
 
                     human_attack()
                     output_battle_score()
-
-                else:
-
-                    everyone_is_alive = False
 
     print('\nNow you or your opponent are empty.\n')
 
@@ -300,6 +294,9 @@ while everyone_is_alive:
 if not everyone_is_alive:
 
     if coolman_player.personal_heal > human_player.personal_heal:
+        print('SO YOU ARE DEAD NOW')
+
+        time.sleep(1)
 
         print('YOU ARE FUCKIN PIECE OF SHIT')
         print('YOU LOOSE THIS GAME')
@@ -307,7 +304,10 @@ if not everyone_is_alive:
 
     elif coolman_player.personal_heal < human_player.personal_heal:
 
-        print('Okey, you win')
+        print('Okay, you win')
+
+        time.sleep(1)
+
         print('Im surprised. You make not only mistakes.')
         print('Like your parents, when they gave a life to you.')
 
@@ -317,7 +317,6 @@ if not everyone_is_alive:
         print('But anyway... You are an idiot')
 
 
-# если значение пула будет 100 - 103 и как хил будет выбрана 100, то комп проиграет, надо исправить (regeneration)
 # ещё там что-то доделать надо в coolman.py
 
 # ВООБЩЕ КРАСИВО БЫЛО БЫ ПОТОМ НАПИСАТЬ БД ВОЗМОЖНЫХ ОТВЕТОВ КОМПА НА РАЗНЫЕ ПУНКТЫ, ЧТОБЫ НЕ ЗАМАЗОЛИЛО ГЛАЗА
@@ -325,7 +324,21 @@ if not everyone_is_alive:
 # ДА И КОД БОЛЕЕ... ПРОФИ СДЕЛАТЬ... БЫЛО БЫ КЛАССНО ДЕКОРАТОРЫ ТАМ ВПИХНУТЬ, АНОТАЦИИ
 # TESTS
 
-# IM NOT SURE DICTS HAVE RESET, WHEN COUNT OF VALUE = 0!!!!!!!!!!!!!!!!!!
-
-
 # 2 0 3 0 1 2 0
+
+# try:
+#     POOL_VALUE: Final = int(input())  # mypy
+# except ValueError:
+#     print("Pool value error.")
+
+
+# пока хз думаю лучше засунуть в юнит тесты человеческого файла
+# def check_cubes(gamer_cube_arr):
+#     if sum(gamer_cube_arr) > POOL_VALUE:
+#         return 0
+#     else:
+#         return 1
+
+
+# print("before the fight while\nhuman_player.human_pool_dict :", human_player.human_pool_dict)
+# print("coolman_player.coolman_pool_dict :", coolman_player.coolman_pool_dict)
