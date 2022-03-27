@@ -75,10 +75,10 @@ def output_start_of_the_game():
     POOL_VALUE = int(input("Enter the pool value : "))
     lofi_print(('POOL_VALUE : ', POOL_VALUE))
 
-    lofi_print("You can enter any count of cubes, but its sum must be less then pool value.(4, 6, 8, 10, 12, 20, 100)",
-               0)
-    lofi_print("Example: 0 3 0 4 1 2 0 Means count 1d4 = 0 1d6 = 3 and etc. Sum of your pool = 288", 0)
-    lofi_print("Its OK if current Pool Value is 288 or less, else piss of", 0)
+    # lofi_print("You can enter any count of cubes, but its sum must be less then pool value.(4, 6, 8, 10, 12, 20, 100)",
+    #            0)
+    # lofi_print("Example: 0 3 0 4 1 2 0 Means count 1d4 = 0 1d6 = 3 and etc. Sum of your pool = 288", 0)
+    # lofi_print("Its OK if current Pool Value is 288 or less, else piss of", 0)
 
     human_character_initialisation()
     coolman_character_initialisation()
